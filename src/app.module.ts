@@ -21,11 +21,11 @@ import { UserModule } from './user/user.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'srv657.hstgr.io',
       port: 3306,
-      username: 'root',
-      password: '',
-      database: 'fitnessclub',
+      username: 'u304157271_eshan',
+      password: 'sRdWRawFB_WgBt9',
+      database: 'u304157271_ppa',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
