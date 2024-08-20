@@ -26,4 +26,8 @@ export class UpdateUserDto {
   @ApiProperty({ example: 'password123', description: 'The password of the user', required: false })
   @IsOptional()
   Password?: string;
+
+  @ApiProperty({ example: 'admin', description: 'The role of the user', required: false })
+  @IsOptional()
+  Role?: string;
 }

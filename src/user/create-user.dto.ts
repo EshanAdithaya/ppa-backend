@@ -10,19 +10,36 @@ export class CreateUserDto {
   @IsNotEmpty()
   LastName: string;
 
-  @ApiProperty({ example: '123456789', description: 'The NIC number of the user' })
+  @ApiProperty({
+    example: '123456789',
+    description: 'The NIC number of the user',
+  })
   @IsNotEmpty()
   NICNumber: string;
 
-  @ApiProperty({ example: 'john.doe@example.com', description: 'The email of the user' })
+  @ApiProperty({
+    example: 'john.doe@example.com',
+    description: 'The email of the user',
+  })
   @IsEmail()
   Email: string;
 
-  @ApiProperty({ example: '1234567890', description: 'The telephone number of the user', required: false })
+  @ApiProperty({
+    example: '1234567890',
+    description: 'The telephone number of the user',
+    required: false,
+  })
   @IsOptional()
   TelephoneNo?: string;
 
-  @ApiProperty({ example: 'password123', description: 'The password of the user' })
+  @ApiProperty({
+    example: 'password123',
+    description: 'The password of the user',
+  })
   @IsNotEmpty()
   Password: string;
+
+  @ApiProperty({ example: 'admin', description: 'The role of the user' })
+  @IsNotEmpty()
+  Role: string;
 }

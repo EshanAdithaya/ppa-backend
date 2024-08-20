@@ -31,6 +31,10 @@ export class User {
   @Column()
   Password: string;
 
+  @ApiProperty({ example: 'admin', description: 'The role of the user' })
+  @Column()
+  Role: string;
+
   @ApiProperty({ example: '2024-08-20T12:34:56.789Z', description: 'The timestamp of when the user was created' })
   @CreateDateColumn()
   CreatedAt: Date;
