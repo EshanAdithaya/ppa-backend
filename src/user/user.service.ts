@@ -13,17 +13,7 @@ export class UserService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
-  // async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
-  //   const { username, password, role } = createUserDto;
-  //   const salt = await bcrypt.genSalt();
-  //   const hashedPassword = await bcrypt.hash(password, salt);
-  //   const user = this.usersRepository.create({
-  //     username,
-  //     password: hashedPassword,
-  //     role,
-  //   });
-  //   return this.usersRepository.save(user);
-  // }
+
   async create(createUserDto: CreateUserDto): Promise<User> {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(createUserDto.Password, salt);
