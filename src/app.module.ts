@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { LoggerMiddleware } from './logger.middleware';
 import { LoggerController } from './logger.controller';
 import { LoggerGateway } from './logger.gateway';
+import { CustomLoggerService } from './custom-logger.service';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { LoggerGateway } from './logger.gateway';
     AuthModule,
   ],
   controllers: [LoggerController],
-  providers: [LoggerGateway],
+  providers: [LoggerGateway, CustomLoggerService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
