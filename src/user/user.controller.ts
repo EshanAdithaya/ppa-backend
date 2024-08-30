@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Get, Param, Put, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './create-user.dto';
 import { UpdateUserDto } from './update-user.dto';
@@ -24,6 +24,7 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Get()
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({
@@ -36,6 +37,7 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Get(':id')
   @ApiOperation({ summary: 'Get a user by ID' })
   @ApiResponse({
@@ -49,6 +51,7 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Update a user' })
   @ApiResponse({
