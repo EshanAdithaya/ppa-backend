@@ -19,7 +19,7 @@ export class UserController {
     type: User,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  async create(@Body() createUserDto: CreateUserDto): Promise<{ user: Partial<User>; barerToken: string }> {
     return this.userService.create(createUserDto);
   }
 

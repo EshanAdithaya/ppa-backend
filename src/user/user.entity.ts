@@ -35,7 +35,15 @@ export class User {
   @Column()
   Role: string;
 
-  @ApiProperty({ example: '2024-08-20T12:34:56.789Z', description: 'The timestamp of when the user was created' })
+  @ApiProperty({ example: 'your_bearer_token', description: 'The bearer token of the user', required: false })
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  BarerToken?: string;
+
+  @ApiProperty({ example: '2024-08-20T12:34:56.789Z', description: 'The timestamp of when the bearer token was generated', required: false })
+  @Column({ type: 'datetime', nullable: true })
+  BarerTokenGeneratedAt?: Date;
+
+  @ApiProperty({ example: '2024-08-20T12:34:56.789Z', description: 'The timestamp of when the user was created', required: false })
   @CreateDateColumn()
   CreatedAt: Date;
 }
