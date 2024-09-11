@@ -6,18 +6,26 @@ import { LoggerMiddleware } from './logger.middleware';
 import { LoggerController } from './logger.controller';
 import { LoggerGateway } from './logger.gateway';
 import { CustomLoggerService } from './custom-logger.service';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'srv657.hstgr.io',
-      port: 3306,
-      username: 'u304157271_eshan',
-      password: 'sRdWRawFB_WgBt9',
-      database: 'u304157271_ppa',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT, 10),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
+      extra: {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      },
     }),
     UserModule,
     AuthModule,
