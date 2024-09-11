@@ -1,5 +1,6 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { LoggerMiddleware } from './logger.middleware';
@@ -9,6 +10,14 @@ import { CustomLoggerService } from './custom-logger.service';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
+
+console.log({
+  DB_HOST: process.env.DB_HOST,
+  DB_PORT: process.env.DB_PORT,
+  DB_USERNAME: process.env.DB_USERNAME,
+  DB_PASSWORD: process.env.DB_PASSWORD,
+  DB_NAME: process.env.DB_NAME,
+});
 
 @Module({
   imports: [
@@ -21,10 +30,12 @@ dotenv.config();
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
+      // Adjust SSL settings based on your requirement
       extra: {
-        ssl: {
-          rejectUnauthorized: false,
-        },
+        // Only include SSL settings if your server supports SSL
+      //  ssl: {
+      //    rejectUnauthorized: false,
+      //  },
       },
     }),
     UserModule,
