@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -40,5 +39,10 @@ export class UserService {
     Object.assign(user, updateUserDto);
 
     return this.userRepository.save(user);
+  }
+
+  async delete(id: number): Promise<void> {
+    const user = await this.findOneById(id);
+    await this.userRepository.remove(user);
   }
 }

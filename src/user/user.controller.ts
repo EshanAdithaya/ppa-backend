@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Put, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './create-user.dto';
@@ -65,5 +65,18 @@ export class UserController {
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
     return this.userService.update(id, updateUserDto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a user' })
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully deleted.',
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  deleteUser(@Param('id') id: number): Promise<void> {
+    return this.userService.delete(id);
   }
 }
