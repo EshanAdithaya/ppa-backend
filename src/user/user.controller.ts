@@ -12,6 +12,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Create a new user' })
   @ApiResponse({
     status: 201,
