@@ -1,21 +1,26 @@
-import { Controller, Post, Body, Get, Param, Put, Delete } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Post, Body, Get, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './create-product.dto';
 import { UpdateProductDto } from './update-product.dto';
 import { Product } from './product.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('products') // <-- This ensures the Products API is grouped under 'products' in Swagger
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'Create a new product' })
   @ApiResponse({ status: 201, description: 'The product has been successfully created.', type: Product })
   create(@Body() createProductDto: CreateProductDto): Promise<Product> {
     return this.productService.create(createProductDto);
   }
+
+
 
   @Get()
   @ApiOperation({ summary: 'Get all products' })
@@ -24,6 +29,7 @@ export class ProductController {
     return this.productService.findAll();
   }
 
+
   @Get(':id')
   @ApiOperation({ summary: 'Get a product by ID' })
   @ApiResponse({ status: 200, description: 'Product retrieved successfully.', type: Product })
@@ -31,6 +37,8 @@ export class ProductController {
     return this.productService.findOneById(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Update a product' })
   @ApiResponse({ status: 200, description: 'The product has been successfully updated.', type: Product })
@@ -38,6 +46,8 @@ export class ProductController {
     return this.productService.update(id, updateProductDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a product' })
   @ApiResponse({ status: 200, description: 'The product has been successfully deleted.' })
