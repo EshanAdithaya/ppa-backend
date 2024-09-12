@@ -10,6 +10,8 @@ import { CustomLoggerService } from './custom-logger.service';
 import { EmailSenderModule } from './EmailSender/email-sender.module'; // <-- Import the EmailSenderModule
 import { UserActivityModule } from './attendence/user-activity.module'; // <-- Import the UserActivityModule for user activity tracking
 import * as dotenv from 'dotenv';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 // Load environment variables
 dotenv.config();
@@ -42,23 +44,17 @@ console.log({
         // },
       },
     }),
-
-    // Import feature modules
     UserModule,
     AuthModule,
-    ProductsModule, // <-- Add ProductsModule here
-    EmailSenderModule, // <-- Include EmailSenderModule for handling email APIs
-    UserActivityModule, // <-- Add UserActivityModule for user activity tracking
-
+    ProductsModule, // <-- Add the ProductsModule here
+    EmailSenderModule, // <-- Add the EmailSenderModule here
+    UserActivityModule, // <-- Add the UserActivityModule here
   ],
-  
-  // Register controllers and services
-  controllers: [LoggerController],
-  providers: [LoggerGateway, CustomLoggerService],
+  controllers: [AppController, LoggerController],
+  providers: [AppService, LoggerGateway, CustomLoggerService],
 })
 export class AppModule implements NestModule {
-  // Apply LoggerMiddleware globally
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*'); // Logs all incoming requests
+    consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }

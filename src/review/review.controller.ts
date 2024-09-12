@@ -4,7 +4,7 @@ import { ReviewService } from './review.service';
 import { CreateReviewDto } from './create-review.dto';
 import { UpdateReviewDto } from './update-review.dto';
 
-@ApiTags('reviews')
+@ApiTags('reviews') // Make sure the tag matches the DocumentBuilder configuration
 @ApiBearerAuth()
 @Controller('reviews')
 export class ReviewController {

@@ -11,11 +11,8 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('users')
     .addTag('auth')
-
-    .addTag('products') // <-- Add the products tag here
-
-    // .addTag('EmailSender')
-
+    .addTag('products')
+    .addTag('reviews') // Make sure this tag matches the controller's @ApiTags
     .addBearerAuth()
     .build();
     
