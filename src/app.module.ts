@@ -2,6 +2,7 @@ import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ProductsModule } from './Products/products.module'; // <-- Import the ProductsModule
 import { LoggerMiddleware } from './logger.middleware';
 import { LoggerController } from './logger.controller';
 import { LoggerGateway } from './logger.gateway';
@@ -21,6 +22,7 @@ console.log({
   DB_NAME: process.env.DB_NAME,
 });
 
+
 @Module({
   imports: [
     // Database connection configuration using environment variables
@@ -31,6 +33,7 @@ console.log({
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
+
       entities: [__dirname + '/**/*.entity{.ts,.js}'], // Path to entity files
       synchronize: true, // Use false in production to avoid accidental schema sync
       extra: {
@@ -39,12 +42,17 @@ console.log({
         //   rejectUnauthorized: false,
         // },
       },
+
     }),
 
     // Import feature modules
     UserModule,
     AuthModule,
+
+    ProductsModule, // <-- Add ProductsModule here
+
     EmailSenderModule, // Include the EmailSenderModule for handling email APIs
+
   ],
   
   // Register controllers and services
