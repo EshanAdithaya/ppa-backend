@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateReviewDto {
-  @ApiProperty({ example: 'Product Review', description: 'Type of the review' })
+  @ApiProperty({ example: 'Product', description: 'The type of review' })
   type: string;
 
-  @ApiProperty({ example: 1, description: 'Number of reviews or rating count' })
+  @ApiProperty({ example: 5, description: 'The count of items reviewed' })
   count: number;
 
-  @ApiProperty({ example: 'This is a sample review', description: 'Description of the review' })
+  @ApiProperty({ example: 'Good product', description: 'The description of the review' })
   description: string;
 
-  @ApiProperty({ example: 'http://example.com/image.png', description: 'URL of the image' })
-  imageURL: string;
+  @ApiProperty({ example: 'http://example.com/image.jpg', description: 'The URL of the image' })
+  imageURL?: string; // Optional
 }

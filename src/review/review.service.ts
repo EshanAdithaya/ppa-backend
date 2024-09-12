@@ -13,7 +13,14 @@ export class ReviewService {
   ) {}
 
   async create(createReviewDto: CreateReviewDto): Promise<Review> {
-    const review = this.reviewRepository.create(createReviewDto);
+    // Create a new Review entity
+    const review = this.reviewRepository.create({
+      Type: createReviewDto.type,
+      Count: createReviewDto.count,
+      Description: createReviewDto.description,
+      ImageURL: createReviewDto.imageURL,
+      Replies: '', // Initialize with an empty string or appropriate default value
+    });
     return this.reviewRepository.save(review);
   }
 
