@@ -2,7 +2,7 @@ import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { ProductsModule } from './products/products.module'; // <-- Import the ProductsModule
+import { ProductsModule } from './Products/products.module'; // <-- Import the ProductsModule
 import { LoggerMiddleware } from './logger.middleware';
 import { LoggerController } from './logger.controller';
 import { LoggerGateway } from './logger.gateway';
