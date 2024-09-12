@@ -13,7 +13,6 @@ export class ReviewService {
   ) {}
 
   async create(createReviewDto: CreateReviewDto): Promise<Review> {
-    // Create a new Review entity
     const review = this.reviewRepository.create({
       Type: createReviewDto.type,
       Count: createReviewDto.count,

@@ -9,10 +9,10 @@ import { UpdateReviewDto } from './update-review.dto';
 @Controller('reviews')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
+
+  @Post()
   @ApiOperation({ summary: 'Create a new review' })
   @ApiResponse({ status: 201, description: 'The review has been created.' })
-  @Post()
-
   createReview(@Body() createReviewDto: CreateReviewDto) {
     return this.reviewService.create(createReviewDto);
   }
@@ -23,6 +23,13 @@ export class ReviewController {
   @ApiResponse({ status: 200, description: 'Review details.' })
   getReview(@Param('id') id: number) {
     return this.reviewService.findOne(id);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Get all reviews' })
+  @ApiResponse({ status: 200, description: 'List of all reviews.' })
+  getAllReviews() {
+    return this.reviewService.findAll();
   }
 
   @Put(':id')
