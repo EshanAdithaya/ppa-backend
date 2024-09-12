@@ -12,6 +12,7 @@ import { UserActivityModule } from './attendence/user-activity.module'; // <-- I
 import * as dotenv from 'dotenv';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ReviewModule } from './review/review.module';
 
 // Load environment variables
 dotenv.config();
@@ -48,7 +49,8 @@ console.log({
     AuthModule,
     ProductsModule, // <-- Add the ProductsModule here
     EmailSenderModule, // <-- Add the EmailSenderModule here
-    UserActivityModule, // <-- Add the UserActivityModule here
+    UserActivityModule,
+    ReviewModule // <-- Add the UserActivityModule here
   ],
   controllers: [AppController, LoggerController],
   providers: [AppService, LoggerGateway, CustomLoggerService],
@@ -58,3 +60,4 @@ export class AppModule implements NestModule {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }
+///hjklp
