@@ -29,20 +29,27 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
+
     const payload = { email: user.Email, sub: user.UserID, role: user.Role };
     const accessToken = this.jwtService.sign(payload);
+
+    // Update user with latest access time and bearer token
+    user.LatestAccessTime = new Date();
+    user.LatestIssuedBearerToken = accessToken;
+    await this.userRepository.save(user);
+
     return { accessToken };
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const { Email, Password, NICNumber } = createUserDto;
-    
+
     // Check if user already exists
     const existingUser = await this.userRepository.findOne({ where: { Email } });
     if (existingUser) {
       throw new ConflictException('Email already in use');
     }
-    
+
     // Hash the password before saving
     const hashedPassword = await bcrypt.hash(Password, 10);
 

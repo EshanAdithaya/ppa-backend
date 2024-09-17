@@ -45,4 +45,11 @@ export class UserService {
     const user = await this.findOneById(id);
     await this.userRepository.remove(user);
   }
+
+  async updateAccessInfo(userId: number, latestAccessTime: Date, latestIssuedBearerToken: string): Promise<User> {
+    const user = await this.findOneById(userId);
+    user.LatestAccessTime = latestAccessTime;
+    user.LatestIssuedBearerToken = latestIssuedBearerToken;
+    return this.userRepository.save(user);
+  }
 }

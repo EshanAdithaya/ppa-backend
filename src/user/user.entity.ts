@@ -20,7 +20,7 @@ export class User {
   NICNumber: string;
 
   @ApiProperty({ example: 'john.doe@example.com', description: 'The email of the user' })
-  @Column({ unique: true })
+  @Column()
   Email: string;
 
   @ApiProperty({ example: '1234567890', description: 'The telephone number of the user' })
@@ -38,4 +38,12 @@ export class User {
   @ApiProperty({ example: '2024-08-20T12:34:56.789Z', description: 'The timestamp of when the user was created' })
   @CreateDateColumn()
   CreatedAt: Date;
+
+  @ApiProperty({ example: '2024-09-17T14:45:00Z', description: 'The timestamp of the latest access time' })
+  @Column({ type: 'datetime', nullable: true })
+  LatestAccessTime: Date;
+
+  @ApiProperty({ example: 'Bearer xyz123', description: 'The latest issued bearer token' })
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  LatestIssuedBearerToken: string;
 }
