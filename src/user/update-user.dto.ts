@@ -30,4 +30,8 @@ export class UpdateUserDto {
   @ApiProperty({ example: 'admin', description: 'The role of the user', required: false })
   @IsOptional()
   Role?: string;
+
+  @ApiProperty({ example: 'Active', description: 'The account status of the user', required: false })
+  @IsOptional()
+  accountStatus?: string; // Optional
 }

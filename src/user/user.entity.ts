@@ -35,6 +35,10 @@ export class User {
   @Column()
   Role: string;
 
+  @ApiProperty({ example: 'Active', description: 'The account status of the user' })
+  @Column({ default: 'Active' })
+  accountStatus: string;
+
   @ApiProperty({ example: '2024-08-20T12:34:56.789Z', description: 'The timestamp of when the user was created' })
   @CreateDateColumn()
   CreatedAt: Date;
