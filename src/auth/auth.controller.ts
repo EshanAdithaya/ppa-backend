@@ -6,6 +6,7 @@ import {
   UseGuards,
   Req,
   BadRequestException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './login.dto';
@@ -90,7 +91,45 @@ export class AuthController {
     return { message: 'Password reset successfully' };
   }
 
-  // Token live time check endpoint
+  // Verify user authentication and get user info
+  @Get('verify')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Verify user authentication and get user info' })
+  @ApiResponse({ status: 200, description: 'User is authenticated', type: Object })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async verifyAuth(@Req() req) {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = this.jwtService.decode(token) as any;
+
+    if (!decodedToken) {
+      throw new UnauthorizedException('Invalid token');
+    }
+
+    const now = Math.floor(Date.now() / 1000);
+    const exp = decodedToken.exp;
+    const remainingTime = exp - now;
+
+    if (remainingTime <= 0) {
+      throw new UnauthorizedException('Token has expired');
+    }
+
+    const user = await this.authService.findUserById(decodedToken.sub);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    return {
+      isAuthenticated: true,
+      userId: user.UserID,
+      email: user.Email,
+      role: user.Role,
+      remainingTime,
+      lastAccessTime: user.LatestAccessTime,
+    };
+  }
+
+  // Check remaining live time of the token
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @Get('token/check-live-time')
@@ -118,7 +157,7 @@ export class AuthController {
     }
   }
 
-  // Token live time extension endpoint
+  // Extend bearer token live time by 1 hour
   @Post('token/extend-live-time')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()

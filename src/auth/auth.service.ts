@@ -18,6 +18,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  async findUserById(id: number): Promise<User | null> {
+    return this.userRepository.findOne({ where: { UserID: id } });
+  }
+
   async validateUser(email: string, pass: string): Promise<User | null> {
     const user = await this.userRepository.findOne({ where: { Email: email } });
     if (user && (await bcrypt.compare(pass, user.Password))) {
