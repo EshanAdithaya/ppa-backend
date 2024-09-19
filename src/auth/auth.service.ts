@@ -10,12 +10,6 @@ import { CreateUserDto } from './auth.user.dto';
 
 @Injectable()
 export class AuthService {
-  createUser(createUserDto: CreateUserDto): Promise<User> {
-    throw new Error('Method not implemented.');
-  }
-  login(loginDto: LoginDto): Promise<{ accessToken: string; }> {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -24,7 +18,45 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  // ... existing methods ...
+  async validateUser(email: string, pass: string): Promise<User | null> {
+    const user = await this.userRepository.findOne({ where: { Email: email } });
+    if (user && (await bcrypt.compare(pass, user.Password))) {
+      return user;
+    }
+    return null;
+  }
+
+  async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
+    const { email, password } = loginDto;
+    const user = await this.validateUser(email, password);
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    const payload = { email: user.Email, sub: user.UserID, role: user.Role };
+    const accessToken = this.jwtService.sign(payload);
+    // Update user with latest access time and bearer token
+    user.LatestAccessTime = new Date();
+    user.LatestIssuedBearerToken = accessToken;
+    await this.userRepository.save(user);
+    return { accessToken };
+  }
+
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    const { Email, Password, NICNumber } = createUserDto;
+    // Check if user already exists
+    const existingUser = await this.userRepository.findOne({ where: { Email } });
+    if (existingUser) {
+      throw new ConflictException('Email already in use');
+    }
+    // Hash the password before saving
+    const hashedPassword = await bcrypt.hash(Password, 10);
+    // Create new user entity
+    const newUser = this.userRepository.create({
+      ...createUserDto,
+      Password: hashedPassword, // store the hashed password
+    });
+    return this.userRepository.save(newUser);
+  }
 
   async generatePasswordResetOTP(email: string): Promise<{ otp: string; expiresAt: Date }> {
     const user = await this.userRepository.findOne({ where: { Email: email } });
