@@ -93,8 +93,7 @@ export class AuthController {
 
   // Verify user authentication and get user info
   @Get('verify')
-  @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth()
+
   @ApiOperation({ summary: 'Verify user authentication and get user info' })
   @ApiResponse({ status: 200, description: 'User is authenticated', type: Object })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
