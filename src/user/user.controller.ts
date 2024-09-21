@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Patch, Delete, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './create-user.dto';
@@ -80,5 +80,34 @@ export class UserController {
   @ApiResponse({ status: 404, description: 'User not found.' })
   deleteUser(@Param('id') id: number): Promise<void> {
     return this.userService.delete(id);
+  }
+
+  // New PATCH endpoint for updating account status
+  @Patch(':id/account-status')
+  @ApiOperation({ summary: 'Update user account status' })
+  @ApiResponse({
+    status: 200,
+    description: 'User account status updated successfully.',
+    type: User,
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  async updateAccountStatus(
+    @Param('id') id: number,
+    @Body('accountStatus') accountStatus: string,
+  ): Promise<User> {
+    return this.userService.updateAccountStatus(id, accountStatus);
+  }
+
+  // New endpoint for marking the account as "Deleted"
+  @Delete(':id/status/delete')
+  @ApiOperation({ summary: 'Mark user account as Deleted' })
+  @ApiResponse({
+    status: 200,
+    description: 'User account status marked as Deleted.',
+    type: User,
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  async markAsDeleted(@Param('id') id: number): Promise<User> {
+    return this.userService.updateAccountStatus(id, 'Deleted');
   }
 }

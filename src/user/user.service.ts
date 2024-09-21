@@ -38,6 +38,12 @@ export class UserService {
     // Update the user's fields with the new data
     Object.assign(user, updateUserDto);
 
+    // If the password is being updated, hash it
+    if (updateUserDto.Password) {
+      const salt = await bcrypt.genSalt();
+      user.Password = await bcrypt.hash(updateUserDto.Password, salt);
+    }
+
     return this.userRepository.save(user);
   }
 
@@ -50,6 +56,13 @@ export class UserService {
     const user = await this.findOneById(userId);
     user.LatestAccessTime = latestAccessTime;
     user.LatestIssuedBearerToken = latestIssuedBearerToken;
+    return this.userRepository.save(user);
+  }
+
+  // Method for updating user account status
+  async updateAccountStatus(id: number, status: string): Promise<User> {
+    const user = await this.findOneById(id);
+    user.accountStatus = status;
     return this.userRepository.save(user);
   }
 }
