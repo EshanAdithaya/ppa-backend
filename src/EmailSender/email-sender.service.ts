@@ -9,7 +9,7 @@ export class EmailSenderService {
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT, 10),
-      secure: process.env.SMTP_SECURE === 'true', // Convert 'true'/'false' to boolean
+      secure: process.env.SMTP_SECURE === 'true',
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -17,13 +17,13 @@ export class EmailSenderService {
     });
   }
 
-  async sendEmail(to: string, subject: string, text: string) {
+  async sendEmail(to: string, subject: string, htmlContent: string) {
     try {
       await this.transporter.sendMail({
         from: process.env.SMTP_USER,
         to,
         subject,
-        text,
+        html: htmlContent, // Changed from 'text' to 'html'
       });
     } catch (error) {
       console.error('Failed to send email:', error);
