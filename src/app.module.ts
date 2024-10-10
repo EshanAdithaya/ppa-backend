@@ -13,6 +13,7 @@ import * as dotenv from 'dotenv';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ReviewModule } from './review/review.module';
+import { PackagesModule } from './package/packages.module';
 
 // Load environment variables
 dotenv.config();
@@ -50,7 +51,8 @@ console.log({
     ProductsModule, // <-- Add the ProductsModule here
     EmailSenderModule, // <-- Add the EmailSenderModule here
     UserActivityModule,
-    ReviewModule // <-- Add the UserActivityModule here
+    ReviewModule,
+    PackagesModule // <-- Add the UserActivityModule here
   ],
   controllers: [AppController, LoggerController],
   providers: [AppService, LoggerGateway, CustomLoggerService],
