@@ -1,13 +1,13 @@
-// image.controller.ts
-import { 
-    Controller, 
-    Post, 
-    Get, 
-    Param, 
-    Delete, 
-    UseInterceptors, 
+import {
+    Controller,
+    Post,
+    Get,
+    Param,
+    Delete,
+    UseInterceptors,
     UploadedFile,
-    UseGuards 
+    UseGuards,
+    BadRequestException,
   } from '@nestjs/common';
   import { FileInterceptor } from '@nestjs/platform-express';
   import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBearerAuth } from '@nestjs/swagger';
@@ -26,8 +26,23 @@ import {
     @ApiOperation({ summary: 'Upload a new image' })
     @ApiConsumes('multipart/form-data')
     @ApiResponse({ status: 201, description: 'Image uploaded successfully.', type: Image })
-    @UseInterceptors(FileInterceptor('file'))
-    upload(@UploadedFile() file: Express.Multer.File): Promise<Image> {
+    @UseInterceptors(
+      FileInterceptor('file', {
+        limits: {
+          fileSize: 5 * 1024 * 1024, // 5MB limit
+        },
+        fileFilter: (req, file, callback) => {
+          if (!file.mimetype.match(/^image\/(jpeg|png|gif|jpg)$/)) {
+            callback(new BadRequestException('Only image files are allowed'), false);
+          }
+          callback(null, true);
+        },
+      }),
+    )
+    async upload(@UploadedFile() file: Express.Multer.File): Promise<Image> {
+      if (!file) {
+        throw new BadRequestException('No file uploaded');
+      }
       return this.imageService.upload(file);
     }
   
