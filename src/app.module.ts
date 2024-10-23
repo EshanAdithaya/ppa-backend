@@ -2,18 +2,19 @@ import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { ProductsModule } from './Products/products.module'; // <-- Import the ProductsModule
+import { ProductsModule } from './Products/products.module';
 import { LoggerMiddleware } from './logger.middleware';
 import { LoggerController } from './logger.controller';
 import { LoggerGateway } from './logger.gateway';
 import { CustomLoggerService } from './custom-logger.service';
-import { EmailSenderModule } from './EmailSender/email-sender.module'; // <-- Import the EmailSenderModule
-import { UserActivityModule } from './attendence/user-activity.module'; // <-- Import the UserActivityModule for user activity tracking
+import { EmailSenderModule } from './EmailSender/email-sender.module';
+import { UserActivityModule } from './attendence/user-activity.module';
+import { ReviewModule } from './review/review.module';
+import { PackagesModule } from './package/packages.module';
+import { ImageModule } from './image/image.module'; // Add this import
 import * as dotenv from 'dotenv';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ReviewModule } from './review/review.module';
-import { PackagesModule } from './package/packages.module';
 
 // Load environment variables
 dotenv.config();
@@ -33,12 +34,12 @@ console.log({
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT, 10), // Ensure port is an integer
+      port: parseInt(process.env.DB_PORT, 10),
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'], // Path to entity files
-      synchronize: true, // Use false in production to avoid accidental schema sync
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true, // Use false in production
       extra: {
         // Uncomment and configure SSL if required
         // ssl: {
@@ -48,11 +49,12 @@ console.log({
     }),
     UserModule,
     AuthModule,
-    ProductsModule, // <-- Add the ProductsModule here
-    EmailSenderModule, // <-- Add the EmailSenderModule here
+    ProductsModule,
+    EmailSenderModule,
     UserActivityModule,
     ReviewModule,
-    PackagesModule // <-- Add the UserActivityModule here
+    PackagesModule,
+    ImageModule, // Add the ImageModule here
   ],
   controllers: [AppController, LoggerController],
   providers: [AppService, LoggerGateway, CustomLoggerService],
@@ -62,4 +64,3 @@ export class AppModule implements NestModule {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }
-///hjklp
