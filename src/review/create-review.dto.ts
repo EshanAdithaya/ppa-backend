@@ -1,3 +1,4 @@
+// create-review.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateReviewDto {
@@ -10,6 +11,16 @@ export class CreateReviewDto {
   @ApiProperty({ example: 'Good product', description: 'The description of the review' })
   description: string;
 
-  @ApiProperty({ example: 'http://example.com/image.jpg', description: 'The URL of the image' })
-  imageURL?: string; // Optional
+  @ApiProperty({ example: 123, description: 'ID of the product being reviewed' })
+  productId: number;
+
+  @ApiProperty({ example: 456, description: 'ID of the user creating the review' })
+  userId: number;
+
+  @ApiProperty({ 
+    example: 'https://example.com/images/product.jpg', 
+    description: 'URL of the review image',
+    required: false 
+  })
+  imageURL?: string;
 }

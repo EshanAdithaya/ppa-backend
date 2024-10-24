@@ -1,3 +1,4 @@
+// review.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -17,8 +18,10 @@ export class ReviewService {
       Type: createReviewDto.type,
       Count: createReviewDto.count,
       Description: createReviewDto.description,
+      ProductID: createReviewDto.productId,
+      UserID: createReviewDto.userId,
       ImageURL: createReviewDto.imageURL,
-      Replies: '', // Initialize with an empty string or appropriate default value
+      Replies: '',
     });
     return this.reviewRepository.save(review);
   }
@@ -37,7 +40,15 @@ export class ReviewService {
 
   async update(id: number, updateReviewDto: UpdateReviewDto): Promise<Review> {
     const review = await this.findOne(id);
-    Object.assign(review, updateReviewDto);
+    
+    // Update fields
+    Object.assign(review, {
+      Type: updateReviewDto.type !== undefined ? updateReviewDto.type : review.Type,
+      Count: updateReviewDto.count !== undefined ? updateReviewDto.count : review.Count,
+      Description: updateReviewDto.description !== undefined ? updateReviewDto.description : review.Description,
+      ImageURL: updateReviewDto.imageURL !== undefined ? updateReviewDto.imageURL : review.ImageURL,
+    });
+
     return this.reviewRepository.save(review);
   }
 
@@ -46,5 +57,17 @@ export class ReviewService {
     if (result.affected === 0) {
       throw new NotFoundException(`Review with ID ${id} not found.`);
     }
+  }
+
+  async findByProduct(productId: number): Promise<Review[]> {
+    return this.reviewRepository.find({
+      where: { ProductID: productId },
+    });
+  }
+
+  async findByUser(userId: number): Promise<Review[]> {
+    return this.reviewRepository.find({
+      where: { UserID: userId },
+    });
   }
 }

@@ -1,3 +1,4 @@
+// update-review.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateReviewDto {
@@ -10,6 +11,10 @@ export class UpdateReviewDto {
   @ApiProperty({ example: 'Good product', description: 'The description of the review' })
   description?: string;
 
-  @ApiProperty({ example: 'http://example.com/image.jpg', description: 'The URL of the image' })
+  @ApiProperty({ 
+    example: 'https://example.com/images/product.jpg', 
+    description: 'URL of the review image',
+    required: false 
+  })
   imageURL?: string;
 }

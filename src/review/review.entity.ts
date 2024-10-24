@@ -1,3 +1,4 @@
+// review.entity.ts
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -19,7 +20,15 @@ export class Review {
   @Column('text')
   Description: string;
 
-  @ApiProperty({ example: 'http://example.com/image.jpg', description: 'The URL of the image' })
+  @ApiProperty({ example: 123, description: 'ID of the product being reviewed' })
+  @Column()
+  ProductID: number;
+
+  @ApiProperty({ example: 456, description: 'ID of the user who created the review' })
+  @Column()
+  UserID: number;
+
+  @ApiProperty({ example: 'https://example.com/images/product.jpg', description: 'The URL of the review image' })
   @Column({ nullable: true })
   ImageURL: string;
 

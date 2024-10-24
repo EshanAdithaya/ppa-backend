@@ -1,10 +1,11 @@
-import { Controller, Post, Get, Put, Delete, Param, Body } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+// review.controller.ts
+import { Controller, Post, Get, Put, Delete, Param, Body, Query } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './create-review.dto';
 import { UpdateReviewDto } from './update-review.dto';
 
-@ApiTags('reviews') // Make sure the tag matches the DocumentBuilder configuration
+@ApiTags('reviews')
 @ApiBearerAuth()
 @Controller('reviews')
 export class ReviewController {
@@ -26,9 +27,20 @@ export class ReviewController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all reviews' })
-  @ApiResponse({ status: 200, description: 'List of all reviews.' })
-  getAllReviews() {
+  @ApiOperation({ summary: 'Get all reviews with optional filtering' })
+  @ApiQuery({ name: 'productId', required: false, description: 'Filter reviews by product ID' })
+  @ApiQuery({ name: 'userId', required: false, description: 'Filter reviews by user ID' })
+  @ApiResponse({ status: 200, description: 'List of reviews.' })
+  async getAllReviews(
+    @Query('productId') productId?: number,
+    @Query('userId') userId?: number,
+  ) {
+    if (productId) {
+      return this.reviewService.findByProduct(productId);
+    }
+    if (userId) {
+      return this.reviewService.findByUser(userId);
+    }
     return this.reviewService.findAll();
   }
 
