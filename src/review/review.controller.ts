@@ -1,5 +1,5 @@
 // review.controller.ts
-import { Controller, Post, Get, Put, Delete, Param, Body, Query } from '@nestjs/common';
+import { Controller, Post, Get, Put, Delete, Param, Body, Query, UseGuards, Request, ForbiddenException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './create-review.dto';
@@ -48,15 +48,22 @@ export class ReviewController {
   @ApiOperation({ summary: 'Update a review by ID' })
   @ApiParam({ name: 'id', type: 'number', description: 'ID of the review to update' })
   @ApiResponse({ status: 200, description: 'The review has been updated.' })
-  updateReview(@Param('id') id: number, @Body() updateReviewDto: UpdateReviewDto) {
-    return this.reviewService.update(id, updateReviewDto);
+  updateReview(
+    @Param('id') id: number,
+    @Body() updateReviewDto: UpdateReviewDto,
+    @Request() req
+  ) {
+    return this.reviewService.update(id, updateReviewDto, req.user.id);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a review by ID' })
   @ApiParam({ name: 'id', type: 'number', description: 'ID of the review to delete' })
   @ApiResponse({ status: 200, description: 'The review has been deleted.' })
-  deleteReview(@Param('id') id: number) {
-    return this.reviewService.delete(id);
+  deleteReview(
+    @Param('id') id: number,
+    @Request() req
+  ) {
+    return this.reviewService.delete(id, req.user.id);
   }
 }

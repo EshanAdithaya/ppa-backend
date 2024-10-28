@@ -1,5 +1,5 @@
 // review.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, DeleteDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('reviews')
@@ -39,4 +39,11 @@ export class Review {
   @ApiProperty({ example: '2024-08-20T12:34:56.789Z', description: 'The timestamp of when the review was created' })
   @CreateDateColumn()
   CreatedAt: Date;
+
+  @ApiProperty({ example: 1, description: 'ID of the original review if this is an update', required: false })
+  @Column({ nullable: true })
+  OriginalReviewID: number;
+
+  @DeleteDateColumn()
+  DeletedAt: Date;
 }
